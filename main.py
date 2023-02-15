@@ -1,5 +1,9 @@
 import typer
 import textwrap
+import json
+import requests
+from datetime import datetime
+from geopy.geocoders import Nominatim
 
 astronaut="""
                  \  _________________________________/
@@ -24,6 +28,18 @@ astronaut="""
 
 
 def main(text: str):
+
+    r = requests.get("http://api.open-notify.org/iss-now.json").json()
+    timestamp = r["timestamp"]
+    iss_position = r["iss_position"]
+    dt = datetime.fromtimestamp(timestamp)
+
+    geolocator = Nominatim(user_agent="geoapiExercises")
+    location = geolocator.reverse(iss_position["latitude"]+","+iss_position["longitude"])
+
+    print(dt)
+    print(location)
+
     top_line="_"*35 # Creates a line 35 dashes long
     print("\n", top_line.rjust(52)) # Prints the line justified to the right
     print("/".rjust(18), "\ ".rjust(36)) # Prints the first line of slashes
