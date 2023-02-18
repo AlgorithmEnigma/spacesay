@@ -1,3 +1,6 @@
-# A simple python remake of cowsay built using the Typer library.
+# Spacesay
 
-Have a astronaut say something!
+A python reimagining of cowsay.
+
+Have a astronaut say something, or let it tell you where the ISS is currently!
+
