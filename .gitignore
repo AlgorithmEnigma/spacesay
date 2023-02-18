@@ -1,3 +1,6 @@
 .env
 /__pycache__
 .vscode
+/spacesay/__pycache__
+/dist
+poetry.lock

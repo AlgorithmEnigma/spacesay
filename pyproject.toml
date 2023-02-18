@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "spacesay"
+version = "0.1.0"
+description = "A CLI spaceman tells you where the ISS is!"
+authors = ["AlgorithmEnigma <me@jordanlowell.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+spacesay = "spacesay.main:app"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = {extras = ["all"], version = "^0.7.0"}
+python-dotenv = "^0.21.1"
+requests = "^2.28.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
