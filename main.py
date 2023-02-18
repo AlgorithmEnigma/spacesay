@@ -32,8 +32,8 @@ astronaut = """
 
 def main(text: Optional[str] = typer.Argument(None)):
     if text is None:
-        location = iss_location()
-        print(location)
+        location_time = iss_location()
+        speech_bubble(location_time)
 
     else:
         speech_bubble(text)
