@@ -1,5 +1,6 @@
 import os
 import requests
+import time
 from datetime import date
 
 
@@ -17,7 +18,8 @@ def iss_location() -> list[str]:
 
         # Get date from the timestamp
         timestamp = r["timestamp"]
-        last_update = date.fromtimestamp(timestamp).isoformat()
+        timestamp = time.ctime(timestamp)[4:-8]
+        # last_update = date.fromtimestamp(timestamp).isoformat()
 
     except requests.exceptions.RequestException as err:
         raise err
@@ -36,7 +38,7 @@ def iss_location() -> list[str]:
         ).json()
 
         if len(responce_geonames["geonames"]) >= 1:
-            return [responce_geonames["geonames"][0]["adminName1"], last_update]
+            return [responce_geonames["geonames"][0]["adminName1"], timestamp]
 
     except requests.exceptions.RequestException as err:
         raise err
@@ -49,7 +51,7 @@ def iss_location() -> list[str]:
             responce_ocean = requests.request(
                 "GET", url_ocean, params=querystring_geonames
             ).json()
-            return [responce_ocean["ocean"]["name"], last_update]
+            return [responce_ocean["ocean"]["name"], timestamp]
         except requests.exceptions.RequestException as err:
             raise err
 

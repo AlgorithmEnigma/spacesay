@@ -26,6 +26,6 @@ def speech_bubble(text: str | list):
             "|".rjust(30 - len(text[0])),
             sep="",
         )
-        print("|".rjust(17), "As of: ".rjust(15), text[1], "|".rjust(13), sep="")
+        print("|".rjust(17), "As of: ".rjust(15), text[1], "|".rjust(11), sep="")
 
     print("\\".rjust(18), ("_" * (max_length - 2)).rjust(35), "/", sep="", end="")
