@@ -3,7 +3,7 @@ import requests
 from datetime import date
 
 
-def iss_location():
+def iss_location() -> list[str]:
     # Request ISS location from open-notify
     try:
         r = requests.get("http://api.open-notify.org/iss-now.json").json()
@@ -36,7 +36,7 @@ def iss_location():
         ).json()
 
         if len(responce_geonames["geonames"]) >= 1:
-            return responce_geonames["geonames"][0]["adminName1"]
+            return [responce_geonames["geonames"][0]["adminName1"], last_update]
 
     except requests.exceptions.RequestException as err:
         raise err
@@ -49,6 +49,8 @@ def iss_location():
             responce_ocean = requests.request(
                 "GET", url_ocean, params=querystring_geonames
             ).json()
-            return responce_ocean["ocean"]["name"]
+            return [responce_ocean["ocean"]["name"], last_update]
         except requests.exceptions.RequestException as err:
             raise err
+
+    return ["ISS not found", str(date.today())]
