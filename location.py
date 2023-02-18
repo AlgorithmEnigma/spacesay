@@ -1,45 +1,54 @@
 import os
 import requests
 from datetime import date
-from pyproj import Geod
-
-
-# TODO: Write comments
 
 
 def iss_location():
     # Request ISS location from open-notify
-    r = requests.get("http://api.open-notify.org/iss-now.json").json()
-    iss_position = r["iss_position"]
+    try:
+        r = requests.get("http://api.open-notify.org/iss-now.json").json()
 
-    # Set latitude and logitude values
-    lat = iss_position["latitude"]
-    lng = iss_position["longitude"]
+        iss_position = r["iss_position"]
 
-    # Get date from the timestamp
-    timestamp = r["timestamp"]
-    last_update = date.fromtimestamp(timestamp).isoformat()
+        # Set latitude and logitude values
+        lat = iss_position["latitude"]
+        lng = iss_position["longitude"]
+        # print(lat, lng, sep=", ")
 
+        # Get date from the timestamp
+        timestamp = r["timestamp"]
+        last_update = date.fromtimestamp(timestamp).isoformat()
 
-    # Reverse geocode lookup
-    url_reverse = "https://trueway-geocoding.p.rapidapi.com/ReverseGeocode"
-    querystring = {"location": f"{lat}, {lng}", "language": "en"}
-    headers = {
-            "X-RapidAPI-Key": os.environ.get("RAPIDAPI_KEY"),
-            "X-RapidAPI-Host": "trueway-geocoding.p.rapidapi.com"
+    except requests.exceptions.RequestException as err:
+        raise err
+
+    # Attempt to find nearby toponym
+    try:
+        url_nearby = "http://api.geonames.org/findNearbyJSON"
+        querystring_geonames = {
+            "lat": {lat},
+            "lng": {lng},
+            "username": os.environ.get("GEONAMES_USERNAME"),
         }
 
-    responce = requests.request("GET", url_reverse, headers=headers, params=querystring).json()
-    print(responce['results'])
+        responce_geonames = requests.request(
+            "GET", url_nearby, params=querystring_geonames
+        ).json()
 
-     # url_forward = "https://trueway-geocoding.p.rapidapi.com/Geocode"
-    # querystring = {'address': responce['results'][0]['address'], "language": "en"}
-    # responce_two = requests.request("GET", url_forward, headers=headers, params=querystring).json()
-    # print(responce_two)
+        if len(responce_geonames["geonames"]) >= 1:
+            return responce_geonames["geonames"][0]["adminName1"]
 
+    except requests.exceptions.RequestException as err:
+        raise err
 
-    
+    # If toponyn not found assume in ocean and find what ocean
+    if len(responce_geonames["geonames"]) == 0:
+        try:
+            url_ocean = "http://api.geonames.org/oceanJSON"
 
-    # geodesic = Geod(ellps="WGS84")
-    #         fwd_azimuth, back_asimuth, distance = geodesic.inv(lats1=[float(lat)], lons1=[float(lng)], lats2=[float(responce_two["results"][0]["location"]["lat"])], lons2=[float(responce_two["results"][0]["location"]["lng"])])
-    #         print(fwd_azimuth)
+            responce_ocean = requests.request(
+                "GET", url_ocean, params=querystring_geonames
+            ).json()
+            return responce_ocean["ocean"]["name"]
+        except requests.exceptions.RequestException as err:
+            raise err

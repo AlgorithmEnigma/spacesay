@@ -6,10 +6,10 @@ from location import iss_location
 from speech import speech_bubble
 
 
-load_dotenv() # Export dotenv into enviroment
+load_dotenv()  # Export dotenv into enviroment
 
 
-astronaut="""
+astronaut = """
                  | /                 
         _____    // 
       .'     '.  v   _ 
@@ -31,17 +31,15 @@ astronaut="""
 
 
 def main(text: Optional[str] = typer.Argument(None)):
-
     if text is None:
         location = iss_location()
-        # print(location)
+        print(location)
 
     else:
-     speech_bubble(text)
+        speech_bubble(text)
 
-   
     print(astronaut)
-    
+
 
 if __name__ == "__main__":
-   typer.run(main)
+    typer.run(main)
