@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "spacesay"
-version = "0.1.0"
+version = "0.1.1"
 description = "A CLI spaceman tells you where the ISS is!"
 authors = ["AlgorithmEnigma <me@jordanlowell.com>"]
 readme = "README.md"
