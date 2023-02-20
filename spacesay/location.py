@@ -4,7 +4,7 @@ import time
 from datetime import date
 
 
-def iss_location() -> list[str]:
+def iss_location(username: str) -> list[str]:
     # Request ISS location from open-notify
     try:
         r = requests.get("http://api.open-notify.org/iss-now.json").json()
@@ -30,7 +30,7 @@ def iss_location() -> list[str]:
         querystring_geonames = {
             "lat": {lat},
             "lng": {lng},
-            "username": os.environ.get("GEONAMES_USERNAME"),
+            "username": username,
         }
 
         responce_geonames = requests.request(

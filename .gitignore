@@ -4,3 +4,4 @@
 /spacesay/__pycache__
 /dist
 poetry.lock
+config.yaml
